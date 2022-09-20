@@ -3,6 +3,8 @@ import {RegisterValidation} from "../validation/register.validation";
 import{getManager} from "typeorm";
 import bcryptjs from "bcryptjs";
 import {User} from "../entity/user.entity"
+import{sign} from "jsonwebtoken";
+
 
 
 export const Register =  async (req: Request, res: Response) => {
@@ -38,11 +40,12 @@ const {password, ...user} = await repository.save({
 export const Login = async (req: Request, res: Response) => {
     const repository = getManager().getRepository(User);
     
+    //if used is duplicate say email already registered or create a new account
     const user = await repository.findOne({where:{email: req.body.email}});
 
     if(!user){
         return res.status(404).send({
-            Message: 'User not found'
+            Message: 'invalid credentials'
         })     
     }
 
@@ -52,5 +55,17 @@ export const Login = async (req: Request, res: Response) => {
         })
     }
 
-    res.send(user);
+    //cookie
+    const token = sign({
+        id: user.id
+    }, "secret");
+
+    res.cookie('jwt', token,{
+        httpOnly: true,
+        maxAge: 24 * 60 *60 *1000 //1day
+     })
+
+    res.send({
+        message: 'success'
+    });
 }

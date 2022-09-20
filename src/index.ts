@@ -9,6 +9,7 @@ createConnection().then(connection =>{
 
     app.use(express.json());
     app.use(cors({
+        credentials: true, //allows front end to get the cookie
         origin: ["http://localhost:3000"]
     }));
     
