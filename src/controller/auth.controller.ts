@@ -1,9 +1,10 @@
 import { Request, Response} from "express";
 import {RegisterValidation} from "../validation/register.validation";
-import{getManager} from "typeorm";
+import{getManager, SimpleConsoleLogger} from "typeorm";
 import bcryptjs from "bcryptjs";
 import {User} from "../entity/user.entity"
 import{sign,verify} from "jsonwebtoken";
+
 
 
 
@@ -74,13 +75,22 @@ export const AuthenticatedUser = async (req:Request, res: Response) => {
     const payload: any = verify(jwt, "secret");
 
     if (!payload) {
-        return res.status(401).send({message: 'unauthenticated'});
-        };
+        return res.status(401).send({message: 'unauthenticated'
+    });
+    };
 
-        const repository = getManager().getRepository(User);
+    const repository = getManager().getRepository<typeof user>(User);
 
-        const user = await repository.findOne(payload.id);
+    const {password, ...user} = await repository.findOneBy(payload.id
+        ).catch(function (error){console.log("id not found")});
 
     res.send(user);
-    
+}
+
+export const Logout = async (req: Request, res: Response) => {
+   res.cookie('jwt', '', {maxAge: 0});
+
+   res.send({
+    message: 'success'
+   })
 }
