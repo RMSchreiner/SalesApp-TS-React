@@ -57,7 +57,7 @@ export const Login = async (req: Request, res: Response) => {
     }
 
     //cookie
-    const token = sign({id: user.id}, "secret");
+    const token = sign({id: user.id}, process.env.SECRET_KEY);
 
     res.cookie('jwt', token,{
         httpOnly: true,
@@ -70,9 +70,11 @@ export const Login = async (req: Request, res: Response) => {
 }
 
 export const AuthenticatedUser = async (req:Request, res: Response) => {
+    try{
     const jwt = req.cookies['jwt'];
 
-    const payload: any = verify(jwt, "secret");
+    //dotenv
+    const payload: any = verify(jwt, process.env.SECRET_KEY);
 
     if (!payload) {
         return res.status(401).send({message: 'unauthenticated'
@@ -85,6 +87,9 @@ export const AuthenticatedUser = async (req:Request, res: Response) => {
         ).catch(function (error){console.log("id not found")});
 
     res.send(user);
+    } catch (e) {
+        return res.status(401).send({message: 'unauthenticated'});
+    }
 }
 
 export const Logout = async (req: Request, res: Response) => {
