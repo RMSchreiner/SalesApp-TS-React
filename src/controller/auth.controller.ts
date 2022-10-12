@@ -70,26 +70,8 @@ export const Login = async (req: Request, res: Response) => {
 }
 
 export const AuthenticatedUser = async (req:Request, res: Response) => {
-    try{
-    const jwt = req.cookies['jwt'];
-
-    //dotenv
-    const payload: any = verify(jwt, process.env.SECRET_KEY);
-
-    if (!payload) {
-        return res.status(401).send({message: 'unauthenticated'
-    });
-    };
-
-    const repository = getManager().getRepository<typeof user>(User);
-
-    const {password, ...user} = await repository.findOneBy(payload.id
-        ).catch(function (error){console.log("id not found")});
-
-    res.send(user);
-    } catch (e) {
-        return res.status(401).send({message: 'unauthenticated'});
-    }
+    const {password, ...user} = req['user'];
+   res.send(user);
 }
 
 export const Logout = async (req: Request, res: Response) => {
