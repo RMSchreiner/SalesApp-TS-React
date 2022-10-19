@@ -81,3 +81,19 @@ export const Logout = async (req: Request, res: Response) => {
     message: 'success'
    })
 }
+
+export const UpdateInfo = async (req: Request, res: Response) => {
+    const user = req['user'];
+
+    const repository = getManager().getRepository(User);
+
+    await repository.update(user.id, req.body);
+
+    const {password, ...data} = await repository.findOne(user.id);
+
+    res.send(data);
+}
+
+export const UpdatePassword = async (req: Request, res: Response) => {
+    const user = req['user'];
+}
