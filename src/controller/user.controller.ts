@@ -27,6 +27,9 @@ export const Users = async (req: Request, res: Response) => {
     res.send(user);
     }
 
+
+    //middleware to make sure we do not error if the called id is not available
+    
     export const GetUser = async  (req: Request, res: Response) => {
         const repository = getManager().getRepository(User);
 
@@ -45,5 +48,13 @@ export const Users = async (req: Request, res: Response) => {
 
         const {password, ...user} = await repository.findOneBy({id: parseInt(req.params.id)});
 
-        res.send(user);
+        res.status(202).send(user);
+    }
+
+    export const DeleteUser = async (req: Request, res: Response) => {
+        const repository = getManager().getRepository(User);
+
+        await repository.delete(req.params.id);
+
+        res.status(204).send(null);
     }
