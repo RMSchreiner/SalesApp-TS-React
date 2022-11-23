@@ -6,7 +6,9 @@ import bcryptjs from "bcryptjs";
 export const Users = async (req: Request, res: Response) => {
         const repository = getManager().getRepository(User);
 
-        const users = await repository.find();
+        const users = await repository.find({
+            relations: ['role']
+        });
 
         res.send(users.map(u => {
             const {password, ...data} = u;
@@ -22,8 +24,12 @@ export const Users = async (req: Request, res: Response) => {
         const repository = getManager().getRepository(User);
 
         const {password, ...user} = await repository.save({...body,
-             password: hashedPassword
-            })
+             password: hashedPassword,
+             role: {
+                id: role_id
+            }
+        })
+
     res.send(user);
     }
 
