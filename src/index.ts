@@ -3,11 +3,11 @@ require('dotenv').config();
 import express, {Request, Response} from 'express';
 import cors from 'cors';
 import {routes} from "./routes";
-import { createConnection } from 'typeorm';
 import cookieParser from "cookie-parser";
+import {dataSource} from "./data-source";
+import Connection from 'mysql2/typings/mysql/lib/Connection';
 
-//understands connection addresses are in ormconfig.json
-createConnection().then(connection =>{
+dataSource.initialize().then(() =>{
     const app = express();
 
     app.use(express.json());
@@ -23,5 +23,6 @@ createConnection().then(connection =>{
         console.log('listening to port 8000')
     });    
 
-});
+})
+.catch ((error) => console.log("express error"));
 

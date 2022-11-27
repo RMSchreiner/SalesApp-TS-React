@@ -1,10 +1,9 @@
 import { Request, Response} from "express";
 import {RegisterValidation} from "../validation/register.validation";
-import{getManager, SimpleConsoleLogger} from "typeorm";
 import bcryptjs from "bcryptjs";
 import {User} from "../entity/user.entity"
 import{sign,verify} from "jsonwebtoken";
-import { brotliDecompressSync } from "zlib";
+import {dataSource} from "../data-source";
 
 
 
@@ -26,7 +25,7 @@ export const Register =  async (req: Request, res: Response) => {
          });
     }
 
-    const repository = getManager().getRepository(User);
+    const repository = dataSource.getRepository(User);
 
     //this deconstructs the password
 const {password, ...user} = await repository.save({
@@ -40,7 +39,7 @@ const {password, ...user} = await repository.save({
 }
 
 export const Login = async (req: Request, res: Response) => {
-    const repository = getManager().getRepository(User);
+    const repository = dataSource.getRepository(User);
     
     //if used is duplicate say email already registered or create a new account
     const user = await repository.findOne({where:{email: req.body.email}});
@@ -86,11 +85,11 @@ export const Logout = async (req: Request, res: Response) => {
 export const UpdateInfo = async (req: Request, res: Response) => {
     const user = req['user'];
 
-    const repository = getManager().getRepository(User);
+    const repository = dataSource.getRepository(User);
 
     await repository.update(user.id, req.body);
 
-    const {password, ...data} = await repository.findOne(user.id);
+    const {password, ...data} = await repository.findOneBy(user.id);
 
     res.send(data);
 }
@@ -104,7 +103,7 @@ export const UpdatePassword = async (req: Request, res: Response) => {
         });
     }
 
-    const repository = getManager().getRepository(User);
+    const repository = dataSource.getRepository(User);
 
     await repository.update(user.id,{
         password: await bcryptjs.hash(req.body.password, 10)

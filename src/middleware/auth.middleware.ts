@@ -1,7 +1,7 @@
 import {Request, Response} from "express";
 import {verify} from "jsonwebtoken";
-import {getManager} from "typeorm";
 import {User} from "../entity/user.entity";
+import {dataSource} from "../data-source";
 
 export const AuthMiddleware = async (req: Request, res: Response, next: Function) => {
     try {
@@ -15,7 +15,7 @@ export const AuthMiddleware = async (req: Request, res: Response, next: Function
         });
         };
     
-        const repository = getManager().getRepository<typeof user>(User);
+        const repository = dataSource.getRepository<typeof user>(User);
     
         const user = await repository.findOneBy(payload.id);
 
