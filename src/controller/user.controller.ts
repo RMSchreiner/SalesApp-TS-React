@@ -41,8 +41,7 @@ export const Users = async (req: Request, res: Response) => {
     export const GetUser = async  (req: Request, res: Response) => {
         const repository = dataSource.getRepository(User);
 
-
-        const {password, ...user} = await repository.findOneBy({id: parseInt(req.params.id)});
+        const {password, ...user} = await repository.findOne({where: {id: parseInt(req.params.id)}, relations: ['role']});
 
         res.send(user);
     }
@@ -52,11 +51,13 @@ export const Users = async (req: Request, res: Response) => {
 
         const repository = dataSource.getRepository(User);
  
-        await repository.update(req.params.id, body);
+        await repository.update(req.params.id, {...body,
+            role: {
+                id: role_id
+            }
+            });
 
-        //findOneBy({id: parseInt(req.params.id)})
-
-        const {password, ...user} = await repository.findOneBy({id: parseInt(req.params.id)});
+        const {password, ...user} = await repository.findOne({where: {id: parseInt(req.params.id)}, relations: ['role']});
 
         res.status(202).send(user);
     }
