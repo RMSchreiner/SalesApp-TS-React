@@ -1,6 +1,6 @@
 
 import {dataSource} from "../data-source";
-import { Permission } from "../entity/permission.entity";
+import {Permission } from "../entity/permission.entity";
 import {Role} from "../entity/role.entity";
 
 //package json needs to have the "roles:seed: ts-node src/seeder/role.seeder.ts" command added to scripts
