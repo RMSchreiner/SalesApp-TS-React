@@ -4,7 +4,7 @@ import { AuthMiddleware } from "./middleware/auth.middleware";
 import {Users, CreateUser, GetUser, UpdateUser, DeleteUser} from "./controller/user.controller";
 import { DataTypeNotSupportedError } from "typeorm";
 import {Permissions} from "./controller/permission.controller";
-import {CreateRole, Roles} from "./controller/role.controller";
+import {CreateRole, Roles, GetRole} from "./controller/role.controller";
 
 
 export const routes = (router: Router) => {
@@ -25,4 +25,5 @@ export const routes = (router: Router) => {
 
    router.get('/api/roles', AuthMiddleware, Roles);
    router.post('/api/roles', AuthMiddleware, CreateRole);
+   router.get('/api/roles/:id', AuthMiddleware, GetRole);
 }

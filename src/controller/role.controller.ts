@@ -20,3 +20,10 @@ export const CreateRole = async (req: Request, res: Response) => {
     
     res.send(role);
 }
+
+export const GetRole = async (req: Request, res: Response) => {
+    const repository = dataSource.getRepository(Role);
+    
+    res.send(await repository.findOne(req.params.id, {relations: ['permissions']}))
+}
+//relations not working 
