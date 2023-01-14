@@ -1,7 +1,7 @@
 import {Request, Response} from 'express';
 import {} from "typeorm";
-import {User} from "../entity/user.entity";
 import bcryptjs from "bcryptjs";
+import {User} from "../entity/user.entity";
 import {dataSource} from "../data-source";
 
 
