@@ -2,9 +2,8 @@ import {Router} from "express";
 import {Register, Login, Logout, AuthenticatedUser, UpdateInfo, UpdatePassword} from "./controller/auth.controller"
 import { AuthMiddleware } from "./middleware/auth.middleware";
 import {Users, CreateUser, GetUser, UpdateUser, DeleteUser} from "./controller/user.controller";
-import { DataTypeNotSupportedError } from "typeorm";
 import {Permissions} from "./controller/permission.controller";
-import {CreateRole, Roles, GetRole} from "./controller/role.controller";
+import {CreateRole, Roles, GetRole, UpdateRole, DeleteRole} from "./controller/role.controller";
 
 
 export const routes = (router: Router) => {
@@ -26,4 +25,6 @@ export const routes = (router: Router) => {
    router.get('/api/roles', AuthMiddleware, Roles);
    router.post('/api/roles', AuthMiddleware, CreateRole);
    router.get('/api/roles/:id', AuthMiddleware, GetRole);
+   router.put('/api/roles/:id', AuthMiddleware, UpdateRole);
+   router.delete('/api/roles/:id', AuthMiddleware, DeleteRole);
 }
