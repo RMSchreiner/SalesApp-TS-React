@@ -6,18 +6,30 @@ import {dataSource} from "../data-source";
 
 
 export const Users = async (req: Request, res: Response) => {
+    const take = 1;
+    const page = parseInt( req.query.page as string || '1');
+
         const repository = dataSource.getRepository(User);
 
-        const users = await repository.find({
+        const [data,total] = await repository.findAndCount({
+            take, 
+            skip: (page -1) * take,
             relations: ['role']
         });
 
-        res.send(users.map(u => {
+        res.send({
+            data: data.map(u => {
             const {password, ...data} = u;
 
             return data;
-        }));
-    };
+        }),
+        meta: {
+            total, 
+            page,
+            last_page: Math.ceil(total/ take)
+        }
+        });
+    }
 
     export const CreateUser = async (req:Request, res: Response) => {
         const {role_id, ...body} = req.body;
