@@ -19,6 +19,9 @@ export const Upload = async (req: Request, res:Response) => {
     const upload = multer({storage}).single('image');
 
     upload(req, res, (err) => {
+        if(err){
+            return res.send(400).send(err);
+        }
         res.send({
             url: `http://localhost:8000/api/uploads/${(req as MulterRequest).file.filename}`
         })
