@@ -10,7 +10,7 @@ export class OrderItem{
     price: number;
 
     @Column()
-    quanity: number;
+    quantity: number;
 
     @CreateDateColumn()
     created_at: string;
