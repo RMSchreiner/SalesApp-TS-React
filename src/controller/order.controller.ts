@@ -38,5 +38,22 @@ export const Export = async (Request, Response) => {
         fields: ['ID', 'Name', 'Email', 'Product Title', 'Quantity']
     });
 
-    
+    const repository = dataSource.getRepository(Order);
+
+    const orders = await repository.find({relations: ['order_items']});
+
+    const json = [];
+
+    orders.forEach((order:Order) => {
+        json.push({
+            ID: order.id,
+            Name: order.name,
+            Email: order.email, 
+            'Product Title': '',
+            Price: '',
+            Quantity: ''
+        });
+
+        order.order_items.forEach()
+    })
 }
