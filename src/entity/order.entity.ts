@@ -1,4 +1,4 @@
-import {Entity, ManyToOne, JoinColumn, PrimaryGeneratedColumn, CreateDateColumn, Column, OneToMany} from "typeorm";
+import {Entity, ManyToOne, JoinColumn, PrimaryGeneratedColumn, CreateDateColumn, Column, OneToMany, UpdateDateColumn} from "typeorm";
 import {OrderItem} from "./order-item.entity";
 
 @Entity()
@@ -15,7 +15,7 @@ export class Order{
   @Column()
   email: string;
 
-  @CreateDateColumn()
+  @Column()
   created_at: string;
 
   @OneToMany( () => OrderItem, orderItem => orderItem.order)

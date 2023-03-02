@@ -1,10 +1,13 @@
-import {Entity, ManyToOne, JoinColumn, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToMany } from "typeorm";
+import {Entity, ManyToOne, JoinColumn, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToMany, UpdateDateColumn } from "typeorm";
 import{Order} from './order.entity'
 
 @Entity()
 export class OrderItem{
     @PrimaryGeneratedColumn()
     id:number;
+
+    @Column()
+    product_title: string;
 
     @Column()
     price: number;

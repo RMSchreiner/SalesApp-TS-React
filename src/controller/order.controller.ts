@@ -2,6 +2,7 @@ import {Request, Response} from "express";
 import { dataSource } from "../data-source";
 import { Order } from "../entity/order.entity";
 import {Parser} from "json2csv";
+import {OrderItem} from "../entity/order-item.entity";
 
 export const Orders = async (req: Request, res: Response) => {
     const take = 15;
@@ -21,7 +22,7 @@ export const Orders = async (req: Request, res: Response) => {
                 name: order.name,
                 email: order.email,
                 total: order.total,
-                createdat: order.created_at,
+                created_at: order.created_at,
                 order_items: order.order_items
 
             })),
@@ -33,7 +34,7 @@ export const Orders = async (req: Request, res: Response) => {
         });
 } 
  
-export const Export = async (Request, Response) => {
+export const Export = async (req: Request, res: Response) => {
     const parser = new Parser({
         fields: ['ID', 'Name', 'Email', 'Product Title', 'Quantity']
     });
@@ -54,6 +55,21 @@ export const Export = async (Request, Response) => {
             Quantity: ''
         });
 
-        order.order_items.forEach()
-    })
+        order.order_items.forEach((item: OrderItem) => {
+            json.push({
+                ID: '',
+                Name: '',
+                Email: '', 
+                'Product Title': item.product_title,
+                Price: item.price,
+                Quantity: item.quantity 
+            })
+        });
+    });
+
+    const csv = parser.parse(json);
+
+    res.header('Content-Type', 'text/csv');
+    res.attachment('orders.csv');
+    res.send(csv);
 }
